@@ -1,6 +1,8 @@
 #include<iostream>
 #include <vector>
 #include <limits>
+#include <memory>
+
 
 using namespace std;
 
@@ -54,14 +56,19 @@ class Package
     protected:
     Dimension packageDimension;
     float weight;
+
     int type;
     int packageID;
 
     public:
 
+    string typeArray[8] = {"Cargo", "Container", "Pallets", "Freight", 
+    "StandardParcel", "FragileItem", "ElectricalAppliances","FruitsandVegetables"};
+
 
     Package(){
         packageID = rand();
+        type = 4;
     }
 
     void setDimension(Dimension d){
@@ -96,12 +103,130 @@ class Package
         return packageID;
     }
 
-    double calCost(){
+    int getType(){
+        return type;
+    }
+
+    virtual double calCost(){
         return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth() * weight;
     }
 
+    
 };
 
+// business package type contain Cargo Container Pallets Freight
+class Cargo : public Package{
+    public:
+
+    Cargo(){
+        Dimension theDimension;
+        theDimension.setHeight(10000);
+        theDimension.setWidth(1000);
+        theDimension.setLength(1000);
+        packageID = rand();
+        packageDimension = theDimension;
+        type = 0;
+    }
+    double calCost() override{
+        return 20000 * weight;
+    }
+};
+
+class Container : public Package{
+    public:
+
+    Container(){
+        Dimension theDimension;
+        theDimension.setHeight(10000);
+        theDimension.setWidth(1000);
+        theDimension.setLength(1000);
+        packageID = rand();
+        packageDimension = theDimension;
+        type = 1;
+    }
+
+    double calCost() override{
+        return 10000 * weight;
+    }
+};
+
+class Pallets : public Package{
+    public:
+
+    Pallets(){
+        Dimension theDimension;
+        theDimension.setHeight(10000);
+        theDimension.setWidth(1000);
+        theDimension.setLength(1000);
+        packageID = rand();
+        packageDimension = theDimension;
+        type = 2;
+    }
+    double calCost() override{
+        return 2000 * weight;
+    }
+};
+
+class Freight : public Package{
+    public:
+
+    Freight(){
+        Dimension theDimension;
+        theDimension.setHeight(10000);
+        theDimension.setWidth(1000);
+        theDimension.setLength(1000);
+        packageID = rand();
+        packageDimension = theDimension;
+        type = 3;
+    }
+
+    double calCost() override{
+        return 20000 * weight;
+    }
+};
+
+// private package contain StandardParcel FragileItem ElectricalAppliances FruitsandVegetables
+
+
+class FragileItem : public Package{
+
+    public:
+
+    FragileItem(){
+        packageID = rand();
+        type = 5;
+    }
+
+    double calCost () override{
+        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth() * weight + 100;
+    }
+};
+
+class ElectricalAppliances : public Package{
+
+    public:
+
+    ElectricalAppliances(){
+        packageID = rand();
+        type = 6;
+    }
+    double calCost () override{
+        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth() * weight + 10;
+    }
+};
+
+class FruitsandVegetables : public Package{
+
+    public:
+
+    FruitsandVegetables(){
+        packageID = rand();
+        type = 7;
+    }
+    double calCost () override{
+        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth() * weight + 100;
+    }
+};
 
 
 class Payment {
@@ -239,8 +364,9 @@ class Shipment
 {
     protected:
         
+        string shipmentType;
 
-        Package package;
+        Package* packagePtr;
         Payment thePayment;
         Origin packageOrigin;
         Destination packageDestination;
@@ -253,11 +379,12 @@ class Shipment
 
         Shipment(){
             shipmentID = rand();
+            shipmentType = "Standard Shipment";
         }
 
-        void setPackage(Package pkg)
+        void setPackage(Package* pkg)
         {
-            package = pkg;
+            packagePtr = pkg;
         }
 
         void setPayment(Payment pay){
@@ -278,8 +405,8 @@ class Shipment
         }
 
 
-        Package getPackage(){
-            return package;
+        Package* getPackage(){
+            return packagePtr;
         }
 
         Payment getPayment(){
@@ -304,16 +431,16 @@ class Shipment
             return shipmentID;
         }
 
-        double calBasicPaymentAmount(){
+        virtual double calBasicPaymentAmount(){
             if (method == 0) // land
             {
-                return package.calCost();
+                return packagePtr->calCost();
 
             }else if(method == 1){ // air
-                return package.calCost() * 2;
+                return packagePtr->calCost() * 2;
 
             }else{ // sea
-                return package.calCost() + 10;
+                return packagePtr->calCost() + 10;
             }
             
         }
@@ -322,20 +449,22 @@ class Shipment
             thePayment.setPaymentAmount(calBasicPaymentAmount());
         }
 
-        void displayShipmentInfo(){
+        virtual void displayShipmentInfo(){
             updatePaymentAmount();
 
             cout << "\n";
             cout << "-----------------------------------\n";
             cout << "shipment ID: " << shipmentID << endl;
+            cout << "shipment type: " << shipmentType << endl;
             cout << "method type: " << methodVector[method] << endl << endl;
 
-            cout << "package ID: "<< package.getPackageID() << endl;
-            cout << "package dimmention (L*H*W): " << package.getDimention().getLength() << "x" << package.getDimention().getHeight() << "x" << package.getDimention().getWidth()<< endl;
-            cout << "package weight: " << package.getWeight() << endl << endl;
+            cout << "package ID: "<< packagePtr->getPackageID() << endl;
+            cout << "package dimmention (L*H*W): " << packagePtr->getDimention().getLength() << "x" << packagePtr->getDimention().getHeight() << "x" << packagePtr->getDimention().getWidth()<< endl;
+            cout << "package weight: " << packagePtr->getWeight() << endl;
+            cout << "package type: " << packagePtr->typeArray[packagePtr->getType()] << endl << endl;
             
             cout << "Origin: " << packageOrigin.displayAddress() << endl;
-            cout << "Destination" << packageDestination.displayAddress() << endl;
+            cout << "Destination: " << packageDestination.displayAddress() << endl;
             cout << "Pickup date: " << packageOrigin.getPickupDate() << endl;
             cout << "Estimated delivery date: " << packageDestination.getEstimatedDeliveryDate() << endl << endl;
 
@@ -349,16 +478,90 @@ class Shipment
 };
 
 
+class BusinessShipment: public Shipment
+{
+    protected:
+    string companyName;
+
+    public:
+
+    BusinessShipment(){
+        shipmentID = rand();
+        shipmentType = "Business Shipment";
+    }
+
+    void setCompanyName(string name){
+        companyName = name;
+    }
+    string getCompanyName(){
+        return companyName;
+    }
+
+    // business shipment cheaper
+    double calBasicPaymentAmount() override{
+    if (method == 0) // land
+    {
+        return packagePtr->calCost() * 0.9;
+
+    }else if(method == 1){ // air
+        return packagePtr->calCost() * 2  * 0.9;
+
+    }else{ // sea
+        return packagePtr->calCost() + 10  * 0.9;
+    }
+    }
+
+    void displayShipmentInfo() override{
+        updatePaymentAmount();
+
+        cout << "\n";
+        cout << "-----------------------------------\n";
+        cout << "shipment ID: " << shipmentID << endl;
+        cout << "shipment type: " << shipmentType << endl;
+        cout << "Company Name: " << companyName << endl;
+        cout << "method type: " << methodVector[method] << endl << endl;
+
+        cout << "package ID: "<< packagePtr->getPackageID() << endl;
+        cout << "package dimmention (L*H*W): " << packagePtr->getDimention().getLength() << "x" << packagePtr->getDimention().getHeight() << "x" << packagePtr->getDimention().getWidth()<< endl;
+        cout << "package weight: " << packagePtr->getWeight() << endl << endl;
+        cout << "package type: " << packagePtr->typeArray[packagePtr->getType()] << endl << endl;
+
+        
+        cout << "Origin: " << packageOrigin.displayAddress() << endl;
+        cout << "Destination: " << packageDestination.displayAddress() << endl;
+        cout << "Pickup date: " << packageOrigin.getPickupDate() << endl;
+        cout << "Estimated delivery date: " << packageDestination.getEstimatedDeliveryDate() << endl << endl;
+
+        cout << "Payment method: " << thePayment.getPaymentMethod() << endl;
+        cout << "Payment ID: " << thePayment.getPaymentID() << endl;
+        cout << "Total price: " << thePayment.getPaymentAmount() << endl;
+        cout << "-----------------------------------\n\n";
+
+    }
+};
 
 
-class User{
+class PrivateShipment: public Shipment
+{
+    protected:
+    public:
+    PrivateShipment(){
+        shipmentID = rand();
+        shipmentType = "Private Shipment";
+    }
+
+};
+
+
+
+class User{ 
     protected:
 
     int userId;
     string username;
     string email;
     string password;
-    vector<Shipment> shipmentsVec;
+    vector<shared_ptr<Shipment>> shipmentsPtrVec;
     
     public:
     User() = default;
@@ -373,8 +576,8 @@ class User{
         password = pw;
     }
 
-    void addShipment(Shipment newshipment){
-        shipmentsVec.push_back(newshipment);
+    void addShipment(unique_ptr<Shipment> newshipmentPtr){
+        shipmentsPtrVec.push_back(move(newshipmentPtr));
     }
 
     string getUserPassword(){
@@ -390,12 +593,12 @@ class User{
     }
 
     void displayAllShipment(){
-        if(shipmentsVec.size() == 0){
+        if(shipmentsPtrVec.size() == 0){
             cout << "no shipment created before!" << endl;
             return;
         }
-        for(int i = 0; i < shipmentsVec.size(); i++){
-            shipmentsVec[i].displayShipmentInfo();
+        for(int i = 0; i < shipmentsPtrVec.size(); i++){
+            shipmentsPtrVec[i]->displayShipmentInfo();
         }
     }
 };
@@ -549,23 +752,66 @@ boolUserpair userLogin(vector<User>& usersVec){
     return result;
 }
 
-Shipment createShipment(){
+unique_ptr<Shipment> createShipment(){
     string userInput;
-    bool domesticallyShipment = true;
+    string companyName;
+    bool isDomesticallyShipment = true;
+    bool isBusinessShipment = true;
     int shipmentMethod;
     double l, h, w, weight;
 
-    // cout << "select your shipment type \n1: business shipmment \n2:private shipment\n: ";
-    // userInput = getUserInputOptionNumber(2);
+    cout << "select your shipment type \n1: business shipmment \n2: private shipment\n: ";
+
+    userInput = getUserInputOptionNumber(2);
+
+    if(userInput == "1"){ // business shipment
+        cout << "input your company name: ";
+        cin >> companyName;
+    }else isBusinessShipment = false; // private shipment
 
     cout << "Choose whether to ship domestically or internationally \n1: domestically \n2: internationally \n: ";
     userInput = getUserInputOptionNumber(2);
 
     if(userInput == "2"){
-        domesticallyShipment = false;
+        isDomesticallyShipment = false;
     }
 
-    // cout << "Choose the category of your package: ";
+    Package* thePackage;
+    Dimension theDimension;
+
+    cout << "Choose the category of your package: \n";
+    if(isBusinessShipment){
+        cout << "1: cargo \n2: container \n3: pallets \n4: freight \n: ";
+        userInput = getUserInputOptionNumber(4);
+        if(userInput == "1"){
+            thePackage = new Cargo;
+        }else if (userInput == "2"){
+            thePackage = new Container;
+
+        }else if (userInput == "3"){
+            thePackage = new Pallets;
+
+        }else if (userInput == "4"){
+            thePackage = new Freight;
+
+        }
+
+    }else{
+        // StandardParcel FragileItem ElectricalAppliances FruitsandVegetables
+        cout << "1: StandardParcel \n2: FragileItem \n3: ElectricalAppliances \n4: FruitsandVegetables \n: ";
+        userInput = getUserInputOptionNumber(4);
+        if(userInput == "1"){
+            thePackage = new Package;
+        }else if (userInput == "2"){
+            thePackage = new FragileItem;
+
+        }else if (userInput == "3"){
+            thePackage = new ElectricalAppliances;
+
+        }else if (userInput == "4"){
+            thePackage = new FruitsandVegetables;
+
+        }
 
     cout << "input the height of your package(mm): ";
     h = getPositiveDouble();
@@ -574,19 +820,16 @@ Shipment createShipment(){
     cout << "input the lenght of your package(mm): ";
     l = getPositiveDouble();
 
-    cout << "input the weight of your package(kg): ";
-    weight = getPositiveDouble();
-
-    Dimension theDimension;
     theDimension.setHeight(h);
     theDimension.setLength(l);
     theDimension.setWidth(w);
 
-    Package thePackage;
-    thePackage.setDimension(theDimension);
-    thePackage.setWeight(weight);
+    }
 
-    if (domesticallyShipment)
+    cout << "input the weight of your package(kg): ";
+    weight = getPositiveDouble();
+
+    if (isDomesticallyShipment)
     {
         shipmentMethod = 0;
     }else{
@@ -605,7 +848,7 @@ Shipment createShipment(){
     Origin theOrigin;
     Destination theDestination;
 
-    if(domesticallyShipment){
+    if(isDomesticallyShipment){
         theOrigin.setCountry("Malaysia");
     }else{
         cout << "Input your pick up country: ";
@@ -634,7 +877,7 @@ Shipment createShipment(){
     cout << "\n";
 
 
-    if(domesticallyShipment){
+    if(isDomesticallyShipment){
         theDestination.setCountry("Malaysia");
     }else{
         cout << "Input your destination country: ";
@@ -664,34 +907,64 @@ Shipment createShipment(){
 
 
     Payment thePayment;
-    Shipment theShipment;
-    theShipment.setPackage(thePackage);
-    theShipment.setOrigin(theOrigin);
-    theShipment.setDestination(theDestination);
-    theShipment.setPayment(thePayment);
-    theShipment.setMethod(shipmentMethod);
 
-//         
-//         int shipmentID;
-
-//         vector<string> methodVector = {"land", "air", "sea"};
-//         int method;
-
-    theShipment.updatePaymentAmount();
-    thePayment = theShipment.getPayment();
-
-    cout << "total price: " << thePayment.getPaymentAmount() << " \nselect your payment method \n1: Online Banking \n2: Credit Card \n: ";
-    userInput = getUserInputOptionNumber(2);
-    if (userInput == "1")
+    if (isBusinessShipment)
     {
-        thePayment.setPaymentMethod("Online Banking");
-    }else{
-        thePayment.setPaymentMethod("Credit Card");
-    }
-    theShipment.setPayment(thePayment);
 
-    return theShipment;
-    
+        thePackage->setWeight(weight);
+
+        auto theShipment = make_unique<BusinessShipment>();
+        theShipment->setCompanyName(companyName);
+
+        theShipment->setPackage(thePackage);
+        theShipment->setOrigin(theOrigin);
+        theShipment->setDestination(theDestination);
+        theShipment->setPayment(thePayment);
+        theShipment->setMethod(shipmentMethod);
+
+        theShipment->updatePaymentAmount();
+        thePayment = theShipment->getPayment();
+
+        cout << "total price: " << thePayment.getPaymentAmount() << " \nselect your payment method \n1: Online Banking \n2: Credit Card \n: ";
+        userInput = getUserInputOptionNumber(2);
+        if (userInput == "1")
+        {
+            thePayment.setPaymentMethod("Online Banking");
+        }else{
+            thePayment.setPaymentMethod("Credit Card");
+        }
+        theShipment->setPayment(thePayment);
+
+        return theShipment;      
+
+    }else{
+
+        thePackage->setDimension(theDimension);
+        thePackage->setWeight(weight);
+        auto theShipment = make_unique<PrivateShipment>();
+
+        theShipment->setPackage(thePackage);
+        theShipment->setOrigin(theOrigin);
+        theShipment->setDestination(theDestination);
+        theShipment->setPayment(thePayment);
+        theShipment->setMethod(shipmentMethod);
+
+        theShipment->updatePaymentAmount();
+        thePayment = theShipment->getPayment();
+
+        cout << "total price: " << thePayment.getPaymentAmount() << " \nselect your payment method \n1: Online Banking \n2: Credit Card \n: ";
+        userInput = getUserInputOptionNumber(2);
+        if (userInput == "1")
+        {
+            thePayment.setPaymentMethod("Online Banking");
+        }else{
+            thePayment.setPaymentMethod("Credit Card");
+        }
+        theShipment->setPayment(thePayment);
+
+        return theShipment;  
+    }
+        
 
 }
 
@@ -714,10 +987,12 @@ int main()
                 userLogined = false;
 
             }else if(userInput == "2" ){
-                Shipment newShipment = createShipment();
+
+                auto newShipmentPtr = createShipment();
+
                 cout << "created new shippment" << endl;
-                newShipment.displayShipmentInfo();
-                currentUser.addShipment(newShipment);
+                newShipmentPtr->displayShipmentInfo();
+                currentUser.addShipment(move(newShipmentPtr));
 
             }else if(userInput == "3" ){
                 currentUser.displayAllShipment();
@@ -752,9 +1027,10 @@ int main()
 
             }else if(userInput == "3" ){
 
-                Shipment newShipment = createShipment();
+                auto newShipmentPtr = createShipment();
+
                 cout << "created new shippment" << endl;
-                newShipment.displayShipmentInfo();
+                newShipmentPtr->displayShipmentInfo();
 
 
             }else if(userInput == "4" ){
