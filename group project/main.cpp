@@ -2,6 +2,8 @@
 #include <vector>
 #include <limits>
 #include <memory>
+#include <string>
+
 
 
 using namespace std;
@@ -452,8 +454,8 @@ class Shipment
         virtual void displayShipmentInfo(){
             updatePaymentAmount();
 
-            cout << "\n";
-            cout << "-----------------------------------\n";
+            cout << endl;
+            cout << "-----------------------------------" << endl;
             cout << "shipment ID: " << shipmentID << endl;
             cout << "shipment type: " << shipmentType << endl;
             cout << "method type: " << methodVector[method] << endl << endl;
@@ -471,7 +473,7 @@ class Shipment
             cout << "Payment method: " << thePayment.getPaymentMethod() << endl;
             cout << "Payment ID: " << thePayment.getPaymentID() << endl;
             cout << "Total price: " << thePayment.getPaymentAmount() << endl;
-            cout << "-----------------------------------\n\n";
+            cout << "-----------------------------------"<< endl<< endl;
 
         }
 
@@ -514,8 +516,8 @@ class BusinessShipment: public Shipment
     void displayShipmentInfo() override{
         updatePaymentAmount();
 
-        cout << "\n";
-        cout << "-----------------------------------\n";
+        cout << endl;
+        cout << "-----------------------------------" << endl;
         cout << "shipment ID: " << shipmentID << endl;
         cout << "shipment type: " << shipmentType << endl;
         cout << "Company Name: " << companyName << endl;
@@ -535,7 +537,7 @@ class BusinessShipment: public Shipment
         cout << "Payment method: " << thePayment.getPaymentMethod() << endl;
         cout << "Payment ID: " << thePayment.getPaymentID() << endl;
         cout << "Total price: " << thePayment.getPaymentAmount() << endl;
-        cout << "-----------------------------------\n\n";
+        cout << "-----------------------------------"<< endl<< endl;
 
     }
 };
@@ -653,8 +655,9 @@ User registerNewUser(vector<User>& usersVec){
     while (condition)
     {
         condition = false;
-        cout << "input username: ";    
+        cout << "input username: ";   
         cin >> username;
+ 
         
         for(User theUser: usersVec){
             if (username == theUser.getUsername())
@@ -688,6 +691,7 @@ double getPositiveDouble() {
     // Check if the input failed 
     if (cin.fail()) {
         cin.clear(); // Clear the error flag
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "incorrect input, please input again: ";
         return getPositiveDouble();
     }
@@ -760,13 +764,13 @@ unique_ptr<Shipment> createShipment(){
     int shipmentMethod;
     double l, h, w, weight;
 
-    cout << "select your shipment type \n1: business shipmment \n2: private shipment\n: ";
+    cout << "select your shipment type \n1: business shipmment \n2: private shipment(maximum 50kg)\n: ";
 
     userInput = getUserInputOptionNumber(2);
 
     if(userInput == "1"){ // business shipment
         cout << "input your company name: ";
-        cin >> companyName;
+        cin >> userInput;
     }else isBusinessShipment = false; // private shipment
 
     cout << "Choose whether to ship domestically or internationally \n1: domestically \n2: internationally \n: ";
@@ -797,7 +801,7 @@ unique_ptr<Shipment> createShipment(){
         }
 
     }else{
-        // StandardParcel FragileItem ElectricalAppliances FruitsandVegetables
+        //  
         cout << "1: StandardParcel \n2: FragileItem \n3: ElectricalAppliances \n4: FruitsandVegetables \n: ";
         userInput = getUserInputOptionNumber(4);
         if(userInput == "1"){
@@ -828,6 +832,16 @@ unique_ptr<Shipment> createShipment(){
 
     cout << "input the weight of your package(kg): ";
     weight = getPositiveDouble();
+    if(! isBusinessShipment){
+        while (weight > 50)
+        {
+            cout << "the maximum weight of private shipment is 50kg! \ninput the weight of your package(kg): ";
+            weight = getPositiveDouble();
+        }
+        
+    }
+    
+
 
     if (isDomesticallyShipment)
     {
@@ -843,7 +857,7 @@ unique_ptr<Shipment> createShipment(){
 
     }
 
-    cout << "\n"; 
+    cout << endl; 
 
     Origin theOrigin;
     Destination theDestination;
@@ -853,12 +867,14 @@ unique_ptr<Shipment> createShipment(){
     }else{
         cout << "Input your pick up country: ";
         cin >> userInput;
+
         theOrigin.setCountry(userInput);
 
     }
 
     cout << "Input your pick up state: ";
     cin >> userInput;
+
     theOrigin.setState(userInput);
 
 
@@ -874,7 +890,7 @@ unique_ptr<Shipment> createShipment(){
     cin >> userInput;
     theOrigin.setAddress(userInput);
 
-    cout << "\n";
+    cout << endl;
 
 
     if(isDomesticallyShipment){
@@ -1013,9 +1029,9 @@ int main()
                     userLogined = true;
                     currentUser = loginResult.theUser;
 
-                    cout << "login successed!\n";
+                    cout << "login successed!"<< endl <<"";
                 }else{
-                    cout << "login failed!\n";
+                    cout << "login failed!"<< endl <<"";
                 }
 
             }else if(userInput == "2" ){
