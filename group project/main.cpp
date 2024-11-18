@@ -110,7 +110,7 @@ class Package
     }
 
     virtual double calCost(){
-        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth() * weight;
+        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth()*100+ weight*30;
     }
 
     
@@ -139,16 +139,16 @@ class Container : public Package{
 
     Container(){
         Dimension theDimension;
-        theDimension.setHeight(10000);
-        theDimension.setWidth(1000);
-        theDimension.setLength(1000);
+        theDimension.setHeight(20);
+        theDimension.setWidth(5);
+        theDimension.setLength(5);
         packageID = rand();
         packageDimension = theDimension;
         type = 1;
     }
 
     double calCost() override{
-        return 10000 * weight;
+        return 10000 + 10 * weight;
     }
 };
 
@@ -157,15 +157,15 @@ class Pallets : public Package{
 
     Pallets(){
         Dimension theDimension;
-        theDimension.setHeight(10000);
-        theDimension.setWidth(1000);
-        theDimension.setLength(1000);
+        theDimension.setHeight(3);
+        theDimension.setWidth(3);
+        theDimension.setLength(3);
         packageID = rand();
         packageDimension = theDimension;
         type = 2;
     }
     double calCost() override{
-        return 2000 * weight;
+        return 2000 + 10* weight;
     }
 };
 
@@ -174,16 +174,16 @@ class Freight : public Package{
 
     Freight(){
         Dimension theDimension;
-        theDimension.setHeight(10000);
-        theDimension.setWidth(1000);
-        theDimension.setLength(1000);
+        theDimension.setHeight(10);
+        theDimension.setWidth(10);
+        theDimension.setLength(5);
         packageID = rand();
         packageDimension = theDimension;
         type = 3;
     }
 
     double calCost() override{
-        return 20000 * weight;
+        return 4000 + 12* weight;
     }
 };
 
@@ -200,7 +200,7 @@ class FragileItem : public Package{
     }
 
     double calCost () override{
-        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth() * weight + 100;
+        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth() * 40 + 10 * weight + 100;
     }
 };
 
@@ -213,7 +213,7 @@ class ElectricalAppliances : public Package{
         type = 6;
     }
     double calCost () override{
-        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth() * weight + 10;
+        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth()* 50 + 10 * weight + 20;
     }
 };
 
@@ -226,7 +226,7 @@ class FruitsandVegetables : public Package{
         type = 7;
     }
     double calCost () override{
-        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth() * weight + 100;
+        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth()* 30 + 20 * weight + 100;
     }
 };
 
@@ -817,11 +817,12 @@ unique_ptr<Shipment> createShipment(){
 
         }
 
-    cout << "input the height of your package(mm): ";
+    cout << "input the height of your package(m): ";
     h = getPositiveDouble();
-    cout << "input the width of your package(mm): ";
+
+    cout << "input the width of your package(m): ";
     w = getPositiveDouble();
-    cout << "input the lenght of your package(mm): ";
+    cout << "input the lenght of your package(m): ";
     l = getPositiveDouble();
 
     theDimension.setHeight(h);
