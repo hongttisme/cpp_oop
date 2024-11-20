@@ -8,8 +8,8 @@
 
 using namespace std;
 
-const string loginedHomePage = "1: logout \n2: create a shipment \n3: list all created shipment \n4: quit program \n: ";
-const string logoutedHomePage = "1: login \n2: register new account \n3: create a shipment without login \n4: quit program \n: ";
+const string loginedHomePage = "1: Logout \n2: Create Shipment \n3: List All Created Shipment \n4: Quit Program \n: ";
+const string logoutedHomePage = "1: Login \n2: Register New Account \n3: Create A Shipment Without Login \n4: Quit Program \n: ";
 
 class Dimension
 {
@@ -64,7 +64,7 @@ class Package
 
     public:
 
-    string typeArray[8] = {"Cargo", "Container", "Pallets", "Freight", 
+    string typeArray[8] = {"Cargo", "Container", "Pallets", "Freight",
     "StandardParcel", "FragileItem", "ElectricalAppliances","FruitsandVegetables"};
 
 
@@ -113,7 +113,7 @@ class Package
         return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth()*100+ weight*30;
     }
 
-    
+
 };
 
 // business package type contain Cargo Container Pallets Freight
@@ -130,7 +130,7 @@ class Cargo : public Package{
         type = 0;
     }
     double calCost() override{
-        return 20000 * weight;
+        return 20000 + 10 * weight;
     }
 };
 
@@ -165,7 +165,7 @@ class Pallets : public Package{
         type = 2;
     }
     double calCost() override{
-        return 2000 + 10* weight;
+        return 2000 + 10 * weight;
     }
 };
 
@@ -183,7 +183,7 @@ class Freight : public Package{
     }
 
     double calCost() override{
-        return 4000 + 12* weight;
+        return 4000 + 12 * weight;
     }
 };
 
@@ -213,7 +213,7 @@ class ElectricalAppliances : public Package{
         type = 6;
     }
     double calCost () override{
-        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth()* 50 + 10 * weight + 20;
+        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth() * 50 + 10 * weight + 20;
     }
 };
 
@@ -226,7 +226,7 @@ class FruitsandVegetables : public Package{
         type = 7;
     }
     double calCost () override{
-        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth()* 30 + 20 * weight + 100;
+        return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth() * 30 + 20 * weight + 100;
     }
 };
 
@@ -365,7 +365,7 @@ public:
 class Shipment
 {
     protected:
-        
+
         string shipmentType;
 
         Package* packagePtr;
@@ -444,7 +444,7 @@ class Shipment
             }else{ // sea
                 return packagePtr->calCost() + 10;
             }
-            
+
         }
 
         void updatePaymentAmount(){
@@ -456,23 +456,23 @@ class Shipment
 
             cout << endl;
             cout << "-----------------------------------" << endl;
-            cout << "shipment ID: " << shipmentID << endl;
-            cout << "shipment type: " << shipmentType << endl;
-            cout << "method type: " << methodVector[method] << endl << endl;
+            cout << "Shipment ID: " << shipmentID << endl;
+            cout << "Shipment Type: " << shipmentType << endl;
+            cout << "Method Type: " << methodVector[method] << endl << endl;
 
-            cout << "package ID: "<< packagePtr->getPackageID() << endl;
-            cout << "package dimmention (L*H*W): " << packagePtr->getDimention().getLength() << "x" << packagePtr->getDimention().getHeight() << "x" << packagePtr->getDimention().getWidth()<< endl;
-            cout << "package weight: " << packagePtr->getWeight() << endl;
-            cout << "package type: " << packagePtr->typeArray[packagePtr->getType()] << endl << endl;
-            
+            cout << "Package ID: "<< packagePtr->getPackageID() << endl;
+            cout << "Package Dimension (L*H*W): " << packagePtr->getDimention().getLength() << "x" << packagePtr->getDimention().getHeight() << "x" << packagePtr->getDimention().getWidth()<< endl;
+            cout << "Package Weight: " << packagePtr->getWeight() << endl;
+            cout << "Package Type: " << packagePtr->typeArray[packagePtr->getType()] << endl << endl;
+
             cout << "Origin: " << packageOrigin.displayAddress() << endl;
             cout << "Destination: " << packageDestination.displayAddress() << endl;
-            cout << "Pickup date: " << packageOrigin.getPickupDate() << endl;
-            cout << "Estimated delivery date: " << packageDestination.getEstimatedDeliveryDate() << endl << endl;
+            cout << "Pickup Date: " << packageOrigin.getPickupDate() << endl;
+            cout << "Estimated Delivery Date: " << packageDestination.getEstimatedDeliveryDate() << endl << endl;
 
-            cout << "Payment method: " << thePayment.getPaymentMethod() << endl;
+            cout << "Payment Method: " << thePayment.getPaymentMethod() << endl;
             cout << "Payment ID: " << thePayment.getPaymentID() << endl;
-            cout << "Total price: " << thePayment.getPaymentAmount() << endl;
+            cout << "Total Price: " << thePayment.getPaymentAmount() << endl;
             cout << "-----------------------------------"<< endl<< endl;
 
         }
@@ -518,25 +518,25 @@ class BusinessShipment: public Shipment
 
         cout << endl;
         cout << "-----------------------------------" << endl;
-        cout << "shipment ID: " << shipmentID << endl;
-        cout << "shipment type: " << shipmentType << endl;
+        cout << "Shipment ID: " << shipmentID << endl;
+        cout << "Shipment Type: " << shipmentType << endl;
         cout << "Company Name: " << companyName << endl;
-        cout << "method type: " << methodVector[method] << endl << endl;
+        cout << "Method Type: " << methodVector[method] << endl << endl;
 
-        cout << "package ID: "<< packagePtr->getPackageID() << endl;
-        cout << "package dimmention (L*H*W): " << packagePtr->getDimention().getLength() << "x" << packagePtr->getDimention().getHeight() << "x" << packagePtr->getDimention().getWidth()<< endl;
-        cout << "package weight: " << packagePtr->getWeight() << endl << endl;
-        cout << "package type: " << packagePtr->typeArray[packagePtr->getType()] << endl << endl;
+        cout << "Package ID: "<< packagePtr->getPackageID() << endl;
+        cout << "Package Dimension (L*H*W): " << packagePtr->getDimention().getLength() << "x" << packagePtr->getDimention().getHeight() << "x" << packagePtr->getDimention().getWidth()<< endl;
+        cout << "Package Weight: " << packagePtr->getWeight() << endl << endl;
+        cout << "Package Type: " << packagePtr->typeArray[packagePtr->getType()] << endl << endl;
 
-        
+
         cout << "Origin: " << packageOrigin.displayAddress() << endl;
         cout << "Destination: " << packageDestination.displayAddress() << endl;
-        cout << "Pickup date: " << packageOrigin.getPickupDate() << endl;
-        cout << "Estimated delivery date: " << packageDestination.getEstimatedDeliveryDate() << endl << endl;
+        cout << "Pickup Date: " << packageOrigin.getPickupDate() << endl;
+        cout << "Estimated Delivery Date: " << packageDestination.getEstimatedDeliveryDate() << endl << endl;
 
-        cout << "Payment method: " << thePayment.getPaymentMethod() << endl;
+        cout << "Payment Method: " << thePayment.getPaymentMethod() << endl;
         cout << "Payment ID: " << thePayment.getPaymentID() << endl;
-        cout << "Total price: " << thePayment.getPaymentAmount() << endl;
+        cout << "Total Price: " << thePayment.getPaymentAmount() << endl;
         cout << "-----------------------------------"<< endl<< endl;
 
     }
@@ -556,7 +556,7 @@ class PrivateShipment: public Shipment
 
 
 
-class User{ 
+class User{
     protected:
 
     int userId;
@@ -564,7 +564,7 @@ class User{
     string email;
     string password;
     vector<shared_ptr<Shipment>> shipmentsPtrVec;
-    
+
     public:
     User() = default;
     User(string nameString, string emailString){
@@ -596,7 +596,7 @@ class User{
 
     void displayAllShipment(){
         if(shipmentsPtrVec.size() == 0){
-            cout << "no shipment created before!" << endl;
+            cout << "No shipment created before!" << endl;
             return;
         }
         for(int i = 0; i < shipmentsPtrVec.size(); i++){
@@ -619,7 +619,7 @@ string getUserInputOptionNumber(int numberOfOption){
         for(int i = 1; i <= numberOfOption; i++){
             if( userInput == to_string(i))inputIsIncorrect = false;
         }
-        if(inputIsIncorrect) cout << "incorrect input please input again" << endl << ": " ;
+        if(inputIsIncorrect) cout << "Incorrect input please input again" << endl << ": " ;
     }
     return userInput;
 }
@@ -635,18 +635,18 @@ User registerNewUser(vector<User>& usersVec){
     while (condition)
     {
         condition = false;
-        cout << "input email: ";    
+        cout << "Input email: ";
         cin >> email;
-        
+
         for(User theUser: usersVec){
             if (email == theUser.getEmail())
             {
                 condition = true;
             }
-            
+
         }
         if (condition){
-            cout << "email exist, please input again\n: ";
+            cout << "Email exist, please input again\n: ";
         }
     }
 
@@ -655,32 +655,32 @@ User registerNewUser(vector<User>& usersVec){
     while (condition)
     {
         condition = false;
-        cout << "input username: ";   
+        cout << "Input username: ";
         cin >> username;
- 
-        
+
+
         for(User theUser: usersVec){
             if (username == theUser.getUsername())
             {
                 condition = true;
             }
-            
+
         }
         if (condition){
-            cout << "username exist, please input again\n: ";
+            cout << "Username exist, please input again\n: ";
         }
     }
 
 
     // get password
-    cout << "input password: ";
+    cout << "Input password: ";
     cin >> password;
 
     User newUser(username, email);
     newUser.setUserPassword(password);
 
     usersVec.push_back(newUser);
-    
+
     return newUser;
 }
 
@@ -688,16 +688,16 @@ double getPositiveDouble() {
     double value;
     cin >> value;
 
-    // Check if the input failed 
+    // Check if the input failed
     if (cin.fail()) {
         cin.clear(); // Clear the error flag
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "incorrect input, please input again: ";
+        cout << "Incorrect input, please input again: ";
         return getPositiveDouble();
     }
 
     if(value<= 0){
-        cout << "the value must be positive please input again: ";
+        cout << "The value must be positive please input again: ";
         return getPositiveDouble();
     }
 
@@ -714,7 +714,7 @@ boolUserpair userLogin(vector<User>& usersVec){
     boolUserpair result;
     result.loginSuccess = false;
 
-    cout << "input your username or email: ";
+    cout << "Input your username or email: ";
     cin >> userInput;
 
     for(User user: usersVec){
@@ -727,7 +727,7 @@ boolUserpair userLogin(vector<User>& usersVec){
     // if username or email in incorrect
     if(!condition){
 
-        cout << "incorrect username or email! \n1:Enter again\n2:leave\n: ";
+        cout << "Incorrect username or email! \n1:Enter again\n2:Leave\n: ";
         userInput = getUserInputOptionNumber(2);
         if(userInput == "1"){
             return userLogin(usersVec);
@@ -740,7 +740,7 @@ boolUserpair userLogin(vector<User>& usersVec){
     cin >> userInput;
     if (userInput != theUser.getUserPassword())
     {
-        cout << "incorrect password! \n1:Enter again\n2:leave\n: ";
+        cout << "Incorrect password! \n1:Enter again\n2:Leave\n: ";
                 userInput = getUserInputOptionNumber(2);
         if(userInput == "1"){
             return userLogin(usersVec);
@@ -764,16 +764,16 @@ unique_ptr<Shipment> createShipment(){
     int shipmentMethod;
     double l, h, w, weight;
 
-    cout << "select your shipment type \n1: business shipmment \n2: private shipment(maximum 50kg)\n: ";
+    cout << "Select your shipment type \n1: Business Shipment \n2: Private Shipment(maximum 50 kg)\n: ";
 
     userInput = getUserInputOptionNumber(2);
 
     if(userInput == "1"){ // business shipment
-        cout << "input your company name: ";
+        cout << "Input your company name: ";
         cin >> userInput;
     }else isBusinessShipment = false; // private shipment
 
-    cout << "Choose whether to ship domestically or internationally \n1: domestically \n2: internationally \n: ";
+    cout << "Choose whether to ship domestically or internationally \n1: Domestically \n2: Internationally \n: ";
     userInput = getUserInputOptionNumber(2);
 
     if(userInput == "2"){
@@ -785,7 +785,7 @@ unique_ptr<Shipment> createShipment(){
 
     cout << "Choose the category of your package: \n";
     if(isBusinessShipment){
-        cout << "1: cargo \n2: container \n3: pallets \n4: freight \n: ";
+        cout << "1: Cargo \n2: Container \n3: Pallets \n4: Freight \n: ";
         userInput = getUserInputOptionNumber(4);
         if(userInput == "1"){
             thePackage = new Cargo;
@@ -801,8 +801,8 @@ unique_ptr<Shipment> createShipment(){
         }
 
     }else{
-        //  
-        cout << "1: StandardParcel \n2: FragileItem \n3: ElectricalAppliances \n4: FruitsandVegetables \n: ";
+        //
+        cout << "1: Standard Parcel \n2: Fragile Item \n3: Electrical Appliances \n4: Fruits and Vegetables \n: ";
         userInput = getUserInputOptionNumber(4);
         if(userInput == "1"){
             thePackage = new Package;
@@ -817,12 +817,12 @@ unique_ptr<Shipment> createShipment(){
 
         }
 
-    cout << "input the height of your package(m): ";
+    cout << "Input the height of your package(m): ";
     h = getPositiveDouble();
 
-    cout << "input the width of your package(m): ";
+    cout << "Input the width of your package(m): ";
     w = getPositiveDouble();
-    cout << "input the lenght of your package(m): ";
+    cout << "Input the length of your package(m): ";
     l = getPositiveDouble();
 
     theDimension.setHeight(h);
@@ -831,24 +831,24 @@ unique_ptr<Shipment> createShipment(){
 
     }
 
-    cout << "input the weight of your package(kg): ";
+    cout << "Input the weight of your package(kg): ";
     weight = getPositiveDouble();
     if(! isBusinessShipment){
         while (weight > 50)
         {
-            cout << "the maximum weight of private shipment is 50kg! \ninput the weight of your package(kg): ";
+            cout << "The maximum weight of private shipment is 50 kg! \nInput the weight of your package(kg): ";
             weight = getPositiveDouble();
         }
-        
+
     }
-    
+
 
 
     if (isDomesticallyShipment)
     {
         shipmentMethod = 0;
     }else{
-        cout << "select you shipment method \n1: air \n2: sea \n: ";
+        cout << "Select you shipment method \n1: Air \n2: Sea \n: ";
         userInput =  getUserInputOptionNumber(2);
         if(userInput == "1"){
             shipmentMethod = 1;
@@ -858,7 +858,7 @@ unique_ptr<Shipment> createShipment(){
 
     }
 
-    cout << endl; 
+    cout << endl;
 
     Origin theOrigin;
     Destination theDestination;
@@ -942,7 +942,7 @@ unique_ptr<Shipment> createShipment(){
         theShipment->updatePaymentAmount();
         thePayment = theShipment->getPayment();
 
-        cout << "total price: " << thePayment.getPaymentAmount() << " \nselect your payment method \n1: Online Banking \n2: Credit Card \n: ";
+        cout << "Total price: " << thePayment.getPaymentAmount() << " \nSelect your payment method \n1: Online Banking \n2: Credit Card \n: ";
         userInput = getUserInputOptionNumber(2);
         if (userInput == "1")
         {
@@ -952,7 +952,7 @@ unique_ptr<Shipment> createShipment(){
         }
         theShipment->setPayment(thePayment);
 
-        return theShipment;      
+        return theShipment;
 
     }else{
 
@@ -969,7 +969,7 @@ unique_ptr<Shipment> createShipment(){
         theShipment->updatePaymentAmount();
         thePayment = theShipment->getPayment();
 
-        cout << "total price: " << thePayment.getPaymentAmount() << " \nselect your payment method \n1: Online Banking \n2: Credit Card \n: ";
+        cout << "Total price: " << thePayment.getPaymentAmount() << " \nSelect your payment method \n1: Online Banking \n2: Credit Card \n: ";
         userInput = getUserInputOptionNumber(2);
         if (userInput == "1")
         {
@@ -979,9 +979,9 @@ unique_ptr<Shipment> createShipment(){
         }
         theShipment->setPayment(thePayment);
 
-        return theShipment;  
+        return theShipment;
     }
-        
+
 
 }
 
@@ -995,19 +995,20 @@ int main()
     vector<User> usersVector;
     User currentUser;
 
+    cout << "Welcome to Aseana Parcels" << endl;
     while(! escProgram){
         if(userLogined){
             cout << loginedHomePage;
             userInput = getUserInputOptionNumber(4);
             if(userInput == "1"){
-                cout << "logouted!" << endl;
+                cout << "Logout Successful!" << endl;
                 userLogined = false;
 
             }else if(userInput == "2" ){
 
                 auto newShipmentPtr = createShipment();
 
-                cout << "created new shippment" << endl;
+                cout << "Created New Shipment" << endl;
                 newShipmentPtr->displayShipmentInfo();
                 currentUser.addShipment(move(newShipmentPtr));
 
@@ -1018,7 +1019,7 @@ int main()
                 escProgram = true;
             }
 
-            
+
         }else{
 
             cout << logoutedHomePage;
@@ -1030,9 +1031,9 @@ int main()
                     userLogined = true;
                     currentUser = loginResult.theUser;
 
-                    cout << "login successed!"<< endl <<"";
+                    cout << "Login Successfully!"<< endl <<"";
                 }else{
-                    cout << "login failed!"<< endl <<"";
+                    cout << "Login Failed!"<< endl <<"";
                 }
 
             }else if(userInput == "2" ){
@@ -1040,20 +1041,20 @@ int main()
                 userLogined = true;
                 currentUser = registerNewUser(usersVector);
 
-                cout << "created new account and logined!" << endl;
+                cout << "Created new account and login!" << endl;
 
             }else if(userInput == "3" ){
 
                 auto newShipmentPtr = createShipment();
 
-                cout << "created new shippment" << endl;
+                cout << "Created new shipment" << endl;
                 newShipmentPtr->displayShipmentInfo();
 
 
             }else if(userInput == "4" ){
                 escProgram = true;
             }
-    
+
         }
     }
     return 0;
