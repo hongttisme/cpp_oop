@@ -764,7 +764,7 @@ unique_ptr<Shipment> createShipment(){
     int shipmentMethod;
     double l, h, w, weight;
 
-    cout << "Select your shipment type \n1: Business Shipment \n2: Private Shipment(maximum 50 kg)\n: ";
+    cout << "Select your shipment type \n1: Business Shipment \n2: Private Shipment(Maximum 50 kg)\n: ";
 
     userInput = getUserInputOptionNumber(2);
 
@@ -863,6 +863,7 @@ unique_ptr<Shipment> createShipment(){
     Origin theOrigin;
     Destination theDestination;
 
+    cout <<"\nPlease do not enter spacing in your address"<< endl;
     if(isDomesticallyShipment){
         theOrigin.setCountry("Malaysia");
     }else{
