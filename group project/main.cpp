@@ -769,7 +769,7 @@ unique_ptr<Shipment> createShipment(){
     userInput = getUserInputOptionNumber(2);
 
     if(userInput == "1"){ // business shipment
-        cout << "Input your company name: ";
+        cout << "Input your company name (Without Spacing): ";
         cin >> userInput;
     }else isBusinessShipment = false; // private shipment
 
