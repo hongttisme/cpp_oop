@@ -8,9 +8,12 @@
 
 using namespace std;
 
+// Constants for the logged-in and logged-out homepage options
 const string loginedHomePage = "1: Logout \n2: Create Shipment \n3: List All Created Shipment \n4: Quit Program \n: ";
 const string logoutedHomePage = "1: Login \n2: Register New Account \n3: Create A Shipment Without Login \n4: Quit Program \n: ";
 
+
+// Class to handle the dimensions of packages
 class Dimension
 {
     protected:
@@ -20,6 +23,7 @@ class Dimension
 
     public:
     Dimension() = default;
+    // Setters for dimensions
     void setLength(int l)
     {
         length = l;
@@ -35,6 +39,7 @@ class Dimension
         height = h;
     }
 
+    // Getters for dimensions
     int getLength()
     {
         return length;
@@ -52,7 +57,7 @@ class Dimension
 
 };
 
-
+// Base class for all types of packages
 class Package
 {
     protected:
@@ -63,16 +68,17 @@ class Package
     int packageID;
 
     public:
-
+    // Array representing different package types
     string typeArray[8] = {"Cargo", "Container", "Pallets", "Freight",
     "StandardParcel", "FragileItem", "ElectricalAppliances","FruitsandVegetables"};
 
 
     Package(){
-        packageID = rand();
-        type = 4;
+        packageID = rand();  // Generate a random package ID
+        type = 4;    // Default type is StandardParcel
     }
 
+    // Setters
     void setDimension(Dimension d){
         packageDimension = d;
     }
@@ -91,6 +97,8 @@ class Package
         packageID = i;
     }
 
+
+    // Getters
     Dimension getDimention(){
         return packageDimension;
     }
@@ -109,6 +117,7 @@ class Package
         return type;
     }
 
+    // Method to calculate the cost of the package
     virtual double calCost(){
         return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth()*100+ weight*30;
     }
@@ -116,7 +125,8 @@ class Package
 
 };
 
-// business package type contain Cargo Container Pallets Freight
+// Derived classes for business package types
+// Class for Cargo package
 class Cargo : public Package{
     public:
 
@@ -127,13 +137,16 @@ class Cargo : public Package{
         theDimension.setLength(1000);
         packageID = rand();
         packageDimension = theDimension;
-        type = 0;
+        type = 0;   // Type set to Cargo
     }
+
+    // Override cost calculation for Cargo
     double calCost() override{
         return 20000 + 10 * weight;
     }
 };
 
+// Class for Container package
 class Container : public Package{
     public:
 
@@ -144,14 +157,17 @@ class Container : public Package{
         theDimension.setLength(5);
         packageID = rand();
         packageDimension = theDimension;
-        type = 1;
+        type = 1;   // Type set to Container
     }
 
+    // Override cost calculation for Container
     double calCost() override{
         return 10000 + 10 * weight;
     }
 };
 
+
+// Class for Pallets package
 class Pallets : public Package{
     public:
 
@@ -162,13 +178,16 @@ class Pallets : public Package{
         theDimension.setLength(3);
         packageID = rand();
         packageDimension = theDimension;
-        type = 2;
+        type = 2;   // Type set to Pallets
     }
+
+    // Override cost calculation for Pallets
     double calCost() override{
         return 2000 + 10 * weight;
     }
 };
 
+// Class for Freight package
 class Freight : public Package{
     public:
 
@@ -179,69 +198,76 @@ class Freight : public Package{
         theDimension.setLength(5);
         packageID = rand();
         packageDimension = theDimension;
-        type = 3;
+        type = 3;   // Type set to Freight
     }
 
+    // Override cost calculation for Freight
     double calCost() override{
         return 4000 + 12 * weight;
     }
 };
 
-// private package contain StandardParcel FragileItem ElectricalAppliances FruitsandVegetables
+// Derived classes for private package types
 
-
+// Class for FragileItem package
 class FragileItem : public Package{
 
     public:
 
     FragileItem(){
         packageID = rand();
-        type = 5;
+        type = 5;   // Type set to FragileItem
     }
-
+    // Override cost calculation for FragileItem
     double calCost () override{
         return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth() * 40 + 10 * weight + 100;
     }
 };
 
+// Class for ElectricalAppliances package
 class ElectricalAppliances : public Package{
 
     public:
 
     ElectricalAppliances(){
         packageID = rand();
-        type = 6;
+        type = 6;   // Type set to ElectricalAppliances
     }
+
+    // Override cost calculation for ElectricalAppliances
     double calCost () override{
         return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth() * 50 + 10 * weight + 20;
     }
 };
 
+// Class for Fruits and Vegetables packag
 class FruitsandVegetables : public Package{
 
     public:
 
     FruitsandVegetables(){
         packageID = rand();
-        type = 7;
+        type = 7;   // Type set to Fruits and Vegetables
     }
+    // Override cost calculation for Fruits and Vegetables
     double calCost () override{
         return packageDimension.getHeight() * packageDimension.getLength() * packageDimension.getWidth() * 30 + 20 * weight + 100;
     }
 };
 
-
+// Class to handle payment information
 class Payment {
 protected:
-    string paymentMethod;
-    double paymentID;
-    double amount;
+    string paymentMethod;   // Payment method (e.g., Online Banking, Credit Card)
+    int paymentID;    // Unique payment ID
+    double amount;  // Payment amount
 
 public:
     Payment(){
-        paymentID = rand();
+        paymentID = rand(); // Generate a random payment ID
     }
-
+    // Setter
+    // Set the payment method with validation
     void setPaymentMethod(string method) {
         if (method == "Online Banking" || method == "Credit Card") {
             paymentMethod = method;
@@ -251,27 +277,27 @@ public:
         }
     }
 
-    string getPaymentMethod(){
-        return paymentMethod;
+    void setPaymentAmount(int i){
+        amount = i;
     }
 
-    void setPaymentAmount(double i){
-        amount = i;
+    // Getters for payment details
+
+    string getPaymentMethod(){
+        return paymentMethod;
     }
 
     double getPaymentAmount(){
         return amount;
     }
 
-    double getPaymentID(){
+    int getPaymentID(){
         return paymentID;
     }
 
-
-
 };
 
-
+// Base class for addresses
 class Address {
 protected:
     string addressLine;
@@ -281,6 +307,7 @@ protected:
     string country;
 
 public:
+    // Setters for address components
     void setAddress(string addr) {
         addressLine = addr;
     }
@@ -301,6 +328,7 @@ public:
         country = n;
     }
 
+    // Getters for address components
     string getAddress() {
         return addressLine;
     }
@@ -321,19 +349,20 @@ public:
         return country;
     }
 
+    // Display the full address
     string displayAddress() {
         return addressLine + ", " + zip + " " + city + ", " + state + ", " + country;
     }
 };
 
-
+// Destination address class inheriting from Address
 class Destination : public Address {
 protected:
     string estimatedDeliveryDate;
 
 public:
     Destination(){
-        estimatedDeliveryDate = "15/11/2024";
+        estimatedDeliveryDate = "18/12/2024";   // Default delivery date
     }
     void setEstimatedDeliveryDate(string date) {
         estimatedDeliveryDate = date;
@@ -344,14 +373,14 @@ public:
     }
 };
 
-
+// Origin address class inheriting from Address
 class Origin : public Address {
 protected:
     string pickupDate;
 
 public:
     Origin(){
-        pickupDate = "11/11/2024";
+        pickupDate = "11/12/2024";  // Default pickup date
     }
     void setPickupDate(string date) {
         pickupDate = date;
@@ -362,28 +391,29 @@ public:
     }
 };
 
+// Class to represent a shipment
 class Shipment
 {
     protected:
 
-        string shipmentType;
-
-        Package* packagePtr;
-        Payment thePayment;
-        Origin packageOrigin;
-        Destination packageDestination;
-        int shipmentID;
+        string shipmentType;    // Type of shipment (e.g., Business or Private)
+        Package* packagePtr;    // Pointer to the associated package
+        Payment thePayment;     // Payment information
+        Origin packageOrigin;   // Origin address
+        Destination packageDestination; // Destination address
+        int shipmentID;         // Unique shipment ID
 
         vector<string> methodVector = {"land", "air", "sea"};
-        int method;
+        int method;     // Selected shipping method
 
     public:
 
         Shipment(){
-            shipmentID = rand();
-            shipmentType = "Standard Shipment";
+            shipmentID = rand();    // Generate a random shipment ID
+            shipmentType = "Standard Shipment"; // Default shipment type
         }
 
+        // Setters for shipment details
         void setPackage(Package* pkg)
         {
             packagePtr = pkg;
@@ -406,7 +436,7 @@ class Shipment
             packageDestination = d;
         }
 
-
+        // Getters for shipment details
         Package* getPackage(){
             return packagePtr;
         }
@@ -433,24 +463,27 @@ class Shipment
             return shipmentID;
         }
 
+        // Calculate the basic payment amount based on the method
         virtual double calBasicPaymentAmount(){
-            if (method == 0) // land
+            if (method == 0) // land shipping
             {
                 return packagePtr->calCost();
 
-            }else if(method == 1){ // air
+            }else if(method == 1){ // air shipping
                 return packagePtr->calCost() * 2;
 
-            }else{ // sea
+            }else{ // sea shipping
                 return packagePtr->calCost() + 10;
             }
 
         }
 
+        // Update the payment amount
         void updatePaymentAmount(){
             thePayment.setPaymentAmount(calBasicPaymentAmount());
         }
 
+        // Display detailed shipment information
         virtual void displayShipmentInfo(){
             updatePaymentAmount();
 
@@ -479,14 +512,15 @@ class Shipment
 
 };
 
-
+// Derived class for Business shipments
 class BusinessShipment: public Shipment
 {
     protected:
-    string companyName;
+    string companyName; // Name of the business
 
     public:
 
+    // Derived class with different constructor
     BusinessShipment(){
         shipmentID = rand();
         shipmentType = "Business Shipment";
@@ -499,20 +533,22 @@ class BusinessShipment: public Shipment
         return companyName;
     }
 
-    // business shipment cheaper
+    // override the calBasicPaymentAmount method
+    // Business shipments have discounted costs
     double calBasicPaymentAmount() override{
-    if (method == 0) // land
+    if (method == 0) // land shipping
     {
         return packagePtr->calCost() * 0.9;
 
-    }else if(method == 1){ // air
+    }else if(method == 1){ // air shipping
         return packagePtr->calCost() * 2  * 0.9;
 
-    }else{ // sea
+    }else{ // sea shipping
         return packagePtr->calCost() + 10  * 0.9;
     }
     }
 
+    // Display detailed information for Business shipments
     void displayShipmentInfo() override{
         updatePaymentAmount();
 
@@ -542,7 +578,7 @@ class BusinessShipment: public Shipment
     }
 };
 
-
+// Derived class for Private shipments
 class PrivateShipment: public Shipment
 {
     protected:
@@ -555,7 +591,7 @@ class PrivateShipment: public Shipment
 };
 
 
-
+// Class to represent a user in the system
 class User{
     protected:
 
@@ -563,14 +599,16 @@ class User{
     string username;
     string email;
     string password;
-    vector<shared_ptr<Shipment>> shipmentsPtrVec;
+    vector<shared_ptr<Shipment>> shipmentsPtrVec;   // Vector to store all shipments created by the user
 
     public:
-    User() = default;
+    User() = default;   // Default constructor
     User(string nameString, string emailString){
         username = nameString;
         email = emailString;
     }
+
+    // Setters for user details
     void setUserId(int id){
         userId = id;
     }
@@ -578,10 +616,12 @@ class User{
         password = pw;
     }
 
+    // Add a shipment to the user's list of shipments
     void addShipment(unique_ptr<Shipment> newshipmentPtr){
         shipmentsPtrVec.push_back(move(newshipmentPtr));
     }
 
+    // Getters for user details
     string getUserPassword(){
         return password;
     }
@@ -594,6 +634,7 @@ class User{
         return email;
     }
 
+    // Display all shipments created by the user
     void displayAllShipment(){
         if(shipmentsPtrVec.size() == 0){
             cout << "No shipment created before!" << endl;
@@ -605,11 +646,13 @@ class User{
     }
 };
 
+// Struct to return login results, indicating success and the corresponding user
 struct boolUserpair{
-    bool loginSuccess;
+    bool loginSuccess;  // Indicates if login was successful
     User theUser;
 };
 
+// Helper function to get valid user input for options
 string getUserInputOptionNumber(int numberOfOption){
     string userInput;
     bool inputIsIncorrect = true;
@@ -624,13 +667,14 @@ string getUserInputOptionNumber(int numberOfOption){
     return userInput;
 }
 
+// Function to register a new user
 User registerNewUser(vector<User>& usersVec){
     bool condition;
     string username;
     string email;
     string password;
 
-    // check if email in use
+    // Validate if email is already in use
     condition = true;
     while (condition)
     {
@@ -650,7 +694,7 @@ User registerNewUser(vector<User>& usersVec){
         }
     }
 
-    // check if username in use
+    // Validate if username is already in use
     condition = true;
     while (condition)
     {
@@ -672,7 +716,7 @@ User registerNewUser(vector<User>& usersVec){
     }
 
 
-    // get password
+    // Input password
     cout << "Input password: ";
     cin >> password;
 
@@ -684,11 +728,12 @@ User registerNewUser(vector<User>& usersVec){
     return newUser;
 }
 
+// Helper function to get a positive double input
 double getPositiveDouble() {
     double value;
     cin >> value;
 
-    // Check if the input failed
+    // Handle invalid input
     if (cin.fail()) {
         cin.clear(); // Clear the error flag
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -705,6 +750,7 @@ double getPositiveDouble() {
     return value;
 }
 
+// Function to handle user login
 boolUserpair userLogin(vector<User>& usersVec){
     bool condition;
     User theUser;
@@ -714,6 +760,7 @@ boolUserpair userLogin(vector<User>& usersVec){
     boolUserpair result;
     result.loginSuccess = false;
 
+    // Prompt for username or email
     cout << "Input your username or email: ";
     cin >> userInput;
 
@@ -724,7 +771,7 @@ boolUserpair userLogin(vector<User>& usersVec){
         }
     }
 
-    // if username or email in incorrect
+    // If username or email is incorrect
     if(!condition){
 
         cout << "Incorrect username or email! \n1:Enter again\n2:Leave\n: ";
@@ -736,10 +783,13 @@ boolUserpair userLogin(vector<User>& usersVec){
         }
     }
 
+    // Prompt for password
     cout << "input your password: ";
     cin >> userInput;
+    // If password is incorrect
     if (userInput != theUser.getUserPassword())
     {
+        // handle case when password is incorrect
         cout << "Incorrect password! \n1:Enter again\n2:Leave\n: ";
                 userInput = getUserInputOptionNumber(2);
         if(userInput == "1"){
@@ -750,12 +800,14 @@ boolUserpair userLogin(vector<User>& usersVec){
 
     }
 
+    // Login successful, store result in struct
     result.loginSuccess = true;
     result.theUser = theUser;
 
     return result;
 }
 
+// Function to create a shipment
 unique_ptr<Shipment> createShipment(){
     string userInput;
     string companyName;
@@ -764,6 +816,7 @@ unique_ptr<Shipment> createShipment(){
     int shipmentMethod;
     double l, h, w, weight;
 
+    // Prompt
     cout << "Select your shipment type \n1: Business Shipment \n2: Private Shipment(Maximum 50 kg)\n: ";
 
     userInput = getUserInputOptionNumber(2);
@@ -776,6 +829,7 @@ unique_ptr<Shipment> createShipment(){
     cout << "Choose whether to ship domestically or internationally \n1: Domestically \n2: Internationally \n: ";
     userInput = getUserInputOptionNumber(2);
 
+    // user input internationally shipment
     if(userInput == "2"){
         isDomesticallyShipment = false;
     }
@@ -783,9 +837,13 @@ unique_ptr<Shipment> createShipment(){
     Package* thePackage;
     Dimension theDimension;
 
+    // Prompt
     cout << "Choose the category of your package: \n";
+    // if is business shipment
     if(isBusinessShipment){
         cout << "1: Cargo \n2: Container \n3: Pallets \n4: Freight \n: ";
+
+        // handle user input
         userInput = getUserInputOptionNumber(4);
         if(userInput == "1"){
             thePackage = new Cargo;
@@ -800,9 +858,12 @@ unique_ptr<Shipment> createShipment(){
 
         }
 
-    }else{
-        //
+    }else{ // if is private shipment
+
+        // Prompt
         cout << "1: Standard Parcel \n2: Fragile Item \n3: Electrical Appliances \n4: Fruits and Vegetables \n: ";
+
+        // handle user input
         userInput = getUserInputOptionNumber(4);
         if(userInput == "1"){
             thePackage = new Package;
@@ -817,6 +878,7 @@ unique_ptr<Shipment> createShipment(){
 
         }
 
+    // Get package information
     cout << "Input the height of your package(m): ";
     h = getPositiveDouble();
 
@@ -833,6 +895,8 @@ unique_ptr<Shipment> createShipment(){
 
     cout << "Input the weight of your package(kg): ";
     weight = getPositiveDouble();
+
+    // handle the incorrect weight of private shipment ( < 50kg )
     if(! isBusinessShipment){
         while (weight > 50)
         {
@@ -843,11 +907,12 @@ unique_ptr<Shipment> createShipment(){
     }
 
 
-
+    // if is domestically shipment
     if (isDomesticallyShipment)
     {
         shipmentMethod = 0;
-    }else{
+    }else{ // if is internationally shipment
+        // get and handle shipment method information
         cout << "Select you shipment method \n1: Air \n2: Sea \n: ";
         userInput =  getUserInputOptionNumber(2);
         if(userInput == "1"){
@@ -863,7 +928,7 @@ unique_ptr<Shipment> createShipment(){
     Origin theOrigin;
     Destination theDestination;
 
-    cout <<"\nPlease do not enter spacing in your address"<< endl;
+    // get shipment address
     if(isDomesticallyShipment){
         theOrigin.setCountry("Malaysia");
     }else{
@@ -926,6 +991,7 @@ unique_ptr<Shipment> createShipment(){
 
     Payment thePayment;
 
+    // create business Shipment object
     if (isBusinessShipment)
     {
 
@@ -955,7 +1021,8 @@ unique_ptr<Shipment> createShipment(){
 
         return theShipment;
 
-    }else{
+
+    }else{  // create create Shipment object
 
         thePackage->setDimension(theDimension);
         thePackage->setWeight(weight);
@@ -987,7 +1054,7 @@ unique_ptr<Shipment> createShipment(){
 }
 
 
-
+// Main program loop
 int main()
 {
     bool escProgram = false;
@@ -996,7 +1063,8 @@ int main()
     vector<User> usersVector;
     User currentUser;
 
-    cout << "Welcome to Aseana Parcels" << endl;
+    cout << endl << "Welcome to Aseana Parcels" << endl << endl;
+    cout << "WARNING!!: This program has error handling, the only thing is there must be NO SPACES.\nPlease pay special attention to the address part. " << endl << endl;
     while(! escProgram){
         if(userLogined){
             cout << loginedHomePage;
